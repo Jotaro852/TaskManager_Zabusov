@@ -11,6 +11,7 @@
         Title="Task Manager" Height="600" Width="800">
     <Window.Resources>
         <converters:ColorToBrushConverter x:Key="ColorConverter"/>
+        <converters:PriorityToColorConverter x:Key="PriorityColorConverter"/>
         
         <DataTemplate x:Key="CategoryTemplate">
             <StackPanel Orientation="Horizontal">
@@ -32,15 +33,26 @@
         <!-- Панель поиска -->
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
             <TextBox Width="200" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Padding="5" VerticalContentAlignment="Center"/>
-            <Button Content="Поиск" Margin="5,0,0,0" Padding="10,2"/>
+                     Padding="5" VerticalContentAlignment="Center" 
+                     Tag="Поиск по задачам...">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Foreground" Value="Gray"/>
+                                <Setter Property="Text" Value="{Binding Tag, RelativeSource={RelativeSource Self}}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
         </StackPanel>
         
         <!-- Фильтры -->
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10">
             <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
                       ItemTemplate="{StaticResource CategoryTemplate}" Width="200"
-                      SelectedIndex="0" Margin="0,0,10,0">
+                      Margin="0,0,10,0">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
                         <Setter Property="Padding" Value="5"/>
@@ -52,7 +64,8 @@
         </StackPanel>
         
         <!-- Список задач -->
-        <ListView Grid.Row="2" ItemsSource="{Binding TasksView}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListView Grid.Row="2" ItemsSource="{Binding TasksView}" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="#FFE0E0E0" BorderThickness="0,0,0,1" Padding="10,5">
@@ -63,28 +76,38 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             
-                            <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted}" 
-                                      VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <!-- Цвет приоритета -->
+                            <Rectangle Grid.Column="0" Width="5" Fill="{Binding Priority, Converter={StaticResource PriorityColorConverter}}"
+                                       VerticalAlignment="Stretch" Margin="0,0,10,0"/>
                             
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="14"/>
-                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0,5,0,0" Opacity="0.8"/>
                                 
                                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                     <TextBlock Text="Приоритет:" FontWeight="SemiBold"/>
-                                    <TextBlock Text="{Binding Priority}" Margin="5,0,15,0"/>
+                                    <TextBlock Text="{Binding Priority}" Margin="5,0,15,0"
+                                               Foreground="{Binding Priority, Converter={StaticResource PriorityColorConverter}}"/>
                                     
-                                    <TextBlock Text="Категория:" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Категория:" FontWeight="SemiBold" Margin="10,0,0,0"/>
                                     <Rectangle Width="12" Height="12" Fill="{Binding Category.Color, Converter={StaticResource ColorConverter}}" 
                                                Margin="5,0,5,0" VerticalAlignment="Center" RadiusX="2" RadiusY="2"/>
                                     <TextBlock Text="{Binding Category.Name}"/>
                                 </StackPanel>
                             </StackPanel>
                             
-                            <Button Grid.Column="2" Content="Удалить" 
-                                    Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                    CommandParameter="{Binding}"
-                                    Padding="10,2" VerticalAlignment="Center"/>
+                            <!-- Кнопки действий -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Button Content="✏️" ToolTip="Редактировать" 
+                                        Command="{Binding DataContext.EditTaskCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"
+                                        Margin="0,0,5,0" Padding="8,2" FontSize="14"/>
+                                
+                                <Button Content="🗑️" ToolTip="Удалить" 
+                                        Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"
+                                        Padding="8,2" FontSize="14"/>
+                            </StackPanel>
                         </Grid>
                     </Border>
                 </DataTemplate>

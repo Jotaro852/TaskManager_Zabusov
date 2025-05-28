@@ -7,6 +7,8 @@ using TaskManagerWPF.Models;
 using TaskManagerWPF.Services;
 using TaskManagerWPF.Utils;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+using TaskManagerWPF.Views;
 
 namespace TaskManagerWPF.ViewModels
 {
@@ -15,11 +17,16 @@ namespace TaskManagerWPF.ViewModels
         private readonly TaskService _taskService;
         private readonly CategoryService _categoryService;
         private string _searchText = "";
-        private Category? _selectedCategory;
+        private Category _selectedCategory;
 
         public ObservableCollection<TaskItem> Tasks { get; } = new();
-        public List<Category> Categories => _categoryService.Categories;
+        public List<Category> AllCategories => _categoryService.Categories;
         public ICollectionView TasksView { get; }
+
+        public List<Category> Categories => 
+            new List<Category> { new Category { Name = "Без категории" } }
+                .Concat(_categoryService.Categories)
+                .ToList();
 
         public string SearchText
         {
@@ -32,7 +39,7 @@ namespace TaskManagerWPF.ViewModels
             }
         }
 
-        public Category? SelectedCategory
+        public Category SelectedCategory
         {
             get => _selectedCategory;
             set
@@ -45,6 +52,8 @@ namespace TaskManagerWPF.ViewModels
 
         public ICommand AddTaskCommand { get; }
         public ICommand DeleteTaskCommand { get; }
+        public ICommand EditTaskCommand { get; }
+        public ICommand ResetFiltersCommand { get; }
 
         public MainViewModel()
         {
@@ -58,9 +67,13 @@ namespace TaskManagerWPF.ViewModels
 
             TasksView = CollectionViewSource.GetDefaultView(Tasks);
             TasksView.Filter = FilterTasks;
+            
+            SelectedCategory = Categories.FirstOrDefault(c => c.Name == "Без категории");
 
             AddTaskCommand = new RelayCommand(AddTask);
             DeleteTaskCommand = new RelayCommand<TaskItem>(DeleteTask);
+            EditTaskCommand = new RelayCommand<TaskItem>(EditTask);
+            ResetFiltersCommand = new RelayCommand(ResetFilters);
         }
 
         private bool FilterTasks(object obj)
@@ -76,9 +89,16 @@ namespace TaskManagerWPF.ViewModels
             }
             
             // Фильтр по категории
-            if (SelectedCategory != null && task.Category != SelectedCategory)
+            if (SelectedCategory != null)
             {
-                return false;
+                if (SelectedCategory.Name == "Без категории")
+                {
+                    if (task.Category != null) return false;
+                }
+                else if (task.Category != SelectedCategory)
+                {
+                    return false;
+                }
             }
             
             return true;
@@ -86,7 +106,12 @@ namespace TaskManagerWPF.ViewModels
 
         private void AddTask()
         {
-            var newTask = new TaskItem();
+            var newTask = new TaskItem 
+            {
+                Title = "Новая задача",
+                Category = _categoryService.Categories.FirstOrDefault()
+            };
+            
             Tasks.Add(newTask);
             _taskService.AddTask(newTask);
         }
@@ -95,6 +120,22 @@ namespace TaskManagerWPF.ViewModels
         {
             Tasks.Remove(task);
             _taskService.DeleteTask(task);
+        }
+
+        private void EditTask(TaskItem task)
+        {
+            var editWindow = new EditTaskWindow(task, AllCategories);
+            if (editWindow.ShowDialog() == true)
+            {
+                _taskService.UpdateTask(task);
+                TasksView.Refresh();
+            }
+        }
+
+        private void ResetFilters()
+        {
+            SearchText = "";
+            SelectedCategory = Categories.FirstOrDefault(c => c.Name == "Без категории");
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

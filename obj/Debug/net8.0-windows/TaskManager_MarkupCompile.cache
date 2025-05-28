@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\Biostar\RiderProjects\TaskManager\App.xaml
-11407045341
+2333294437
 
-12-1505210612
+141183349440
 199-1321044392
-MainWindow.xaml;
+EditTaskWindow.xaml;MainWindow.xaml;
 
 False
 

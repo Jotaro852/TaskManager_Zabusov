@@ -23,3 +23,6 @@ C:\Users\Biostar\RiderProjects\TaskManager\obj\Debug\net8.0-windows\refint\TaskM
 C:\Users\Biostar\RiderProjects\TaskManager\obj\Debug\net8.0-windows\TaskManager.pdb
 C:\Users\Biostar\RiderProjects\TaskManager\obj\Debug\net8.0-windows\TaskManager.genruntimeconfig.cache
 C:\Users\Biostar\RiderProjects\TaskManager\obj\Debug\net8.0-windows\ref\TaskManager.dll
+C:\Users\Biostar\RiderProjects\TaskManager\obj\Debug\net8.0-windows\EditTaskWindow.g.cs
+C:\Users\Biostar\RiderProjects\TaskManager\obj\Debug\net8.0-windows\EditTaskWindow.baml
+C:\Users\Biostar\RiderProjects\TaskManager\obj\Debug\net8.0-windows\TaskManager.sourcelink.json

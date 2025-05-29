@@ -48,6 +48,6 @@ namespace TaskManagerWPF.Services
                 var json = File.ReadAllText(FilePath);
                 _tasks = JsonConvert.DeserializeObject<List<TaskItem>>(json) ?? new List<TaskItem>();
             }
-        }
+        }  
     }
 }

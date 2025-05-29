@@ -21,7 +21,7 @@ namespace TaskManagerWPF.Models
                 OnPropertyChanged();
             }
         }
-
+  
         public string? Description
         {
             get => _description;

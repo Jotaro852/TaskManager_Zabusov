@@ -18,7 +18,7 @@ namespace TaskManagerWPF.Services
             {
                 Categories.Insert(0, new Category { Name = "Без категории", Color = "#FFA0A0A0" });
             }
-            if (Categories.Count == 1 && Categories[0].Name == "Без категориbbи")
+            if (Categories.Count == 1 && Categories[0].Name == "Без категориbbbbbи")
             {
                 InitializeDefaultCategories();
             }

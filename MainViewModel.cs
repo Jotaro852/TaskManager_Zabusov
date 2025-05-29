@@ -8,7 +8,7 @@ using TaskManagerWPF.Services;
 using TaskManagerWPF.Utils;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-using TaskManager; // Для EditTaskWindow
+using TaskManagerWPF.Views;
 
 namespace TaskManagerWPF.ViewModels
 {
@@ -20,13 +20,8 @@ namespace TaskManagerWPF.ViewModels
         private Category _selectedCategory;
 
         public ObservableCollection<TaskItem> Tasks { get; } = new();
-        public List<Category> AllCategories => _categoryService.Categories;
+        public List<Category> Categories => _categoryService.Categories;
         public ICollectionView TasksView { get; }
-
-        public List<Category> Categories => 
-            new List<Category> { new Category { Name = "Без категории" } }
-                .Concat(_categoryService.Categories)
-                .ToList();
 
         public string SearchText
         {
@@ -60,7 +55,6 @@ namespace TaskManagerWPF.ViewModels
             _taskService = new TaskService();
             _categoryService = new CategoryService();
             
-            // Загрузка задач
             foreach (var task in _taskService.GetTasks())
             {
                 Tasks.Add(task);
@@ -94,7 +88,7 @@ namespace TaskManagerWPF.ViewModels
                 {
                     if (task.Category != null) return false;
                 }
-                else if (task.Category != SelectedCategory)
+                else if (task.Category?.Name != SelectedCategory.Name)
                 {
                     return false;
                 }
@@ -111,13 +105,8 @@ namespace TaskManagerWPF.ViewModels
                 Category = null
             };
             
-            // Сначала добавить в коллекцию
             Tasks.Add(newTask);
-            
-            // Затем сохранить в сервисе
             _taskService.AddTask(newTask);
-            
-            // Обновить фильтр
             TasksView.Refresh();
         }
 
@@ -130,7 +119,7 @@ namespace TaskManagerWPF.ViewModels
 
         private void EditTask(TaskItem task)
         {
-            var editWindow = new EditTaskWindow(task, Categories); // Исправлено на Categories
+            var editWindow = new EditTaskWindow(task, Categories);
             if (editWindow.ShowDialog() == true)
             {
                 _taskService.UpdateTask(task);

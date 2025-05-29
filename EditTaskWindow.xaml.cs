@@ -3,13 +3,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using TaskManagerWPF.Models;
-
-namespace TaskManager
+namespace TaskManagerWPF.Views
 {
     public partial class EditTaskWindow : Window
     {
         public TaskItem Task { get; }
-        private List<Category> Categories { get; }
+        public List<Category> Categories { get; }
 
         public EditTaskWindow(TaskItem task, List<Category> categories)
         {
@@ -18,7 +17,8 @@ namespace TaskManager
             Categories = categories;
             DataContext = this;
             
-            // Инициализация приоритета
+            categoryComboBox.ItemsSource = Categories;
+            
             switch (task.Priority)
             {
                 case Priority.High:
@@ -31,25 +31,22 @@ namespace TaskManager
                     priorityComboBox.SelectedIndex = 0;
                     break;
                 default:
-                    priorityComboBox.SelectedIndex = 1; // Средний по умолчанию
+                    priorityComboBox.SelectedIndex = 1;
                     break;
             }
             
-            // Инициализация категории
             if (task.Category == null)
             {
-                // Устанавливаем "Без категории" если нет категории
-                var noCategory = Categories.FirstOrDefault(c => c.Name == "Без категории");
-                if (noCategory != null)
-                {
-                    Task.Category = noCategory;
-                }
+                categoryComboBox.SelectedItem = Categories.FirstOrDefault(c => c.Name == "Без категории");
+            }
+            else
+            {
+                categoryComboBox.SelectedItem = Categories.FirstOrDefault(c => c.Name == task.Category.Name);
             }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Обновление приоритета
             if (priorityComboBox.SelectedItem is ComboBoxItem selectedItem)
             {
                 Task.Priority = selectedItem.Content.ToString() switch
@@ -61,7 +58,6 @@ namespace TaskManager
                 };
             }
             
-            // Сброс категории если выбрано "Без категории"
             if (Task.Category?.Name == "Без категории")
             {
                 Task.Category = null;

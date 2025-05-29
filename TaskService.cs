@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using TaskManagerWPF.Models;
-using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace TaskManagerWPF.Services
 {

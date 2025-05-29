@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using TaskManagerWPF.Models;
 
@@ -13,7 +14,11 @@ namespace TaskManagerWPF.Services
         public CategoryService()
         {
             LoadCategories();
-            if (Categories.Count == 0)
+            if (!Categories.Any(c => c.Name == "Без категории"))
+            {
+                Categories.Insert(0, new Category { Name = "Без категории", Color = "#FFA0A0A0" });
+            }
+            if (Categories.Count == 1 && Categories[0].Name == "Без категории")
             {
                 InitializeDefaultCategories();
             }
@@ -25,7 +30,11 @@ namespace TaskManagerWPF.Services
             {
                 var json = File.ReadAllText(FilePath);
                 var loaded = JsonConvert.DeserializeObject<List<Category>>(json);
-                if (loaded != null) Categories.AddRange(loaded);
+                if (loaded != null)
+                {
+                    Categories.Clear();
+                    Categories.AddRange(loaded);
+                }
             }
         }
 

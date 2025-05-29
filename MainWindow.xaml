@@ -39,7 +39,7 @@
                      Tag="Поиск по задачам..."/>
         </StackPanel>
         
-        <!-- Фильтры -->
+        <!-- Фильтры -->  
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10">
             <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
                       ItemTemplate="{StaticResource CategoryTemplate}" Width="200"

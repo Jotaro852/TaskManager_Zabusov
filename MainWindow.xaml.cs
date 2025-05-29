@@ -11,4 +11,4 @@ namespace TaskManagerWPF.Views
             DataContext = new MainViewModel();
         }
     }
-}
+}  

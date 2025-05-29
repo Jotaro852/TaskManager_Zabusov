@@ -17,7 +17,7 @@ namespace TaskManagerWPF.ViewModels
         private readonly TaskService _taskService;
         private readonly CategoryService _categoryService;
         private string _searchText = "";
-        private Category _selectedCategory;
+        private Category _selectedCategory;  
 
         public ObservableCollection<TaskItem> Tasks { get; } = new();
         public List<Category> Categories => _categoryService.Categories;

@@ -1,21 +1,33 @@
-<Window x:Class="TaskManagerWPF.Views.EditTaskWindow"
+<Window x:Class="TaskManager.EditTaskWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TaskManagerWPF.Views"
         xmlns:converters="clr-namespace:TaskManagerWPF.Converters"
         mc:Ignorable="d"
         Title="Редактирование задачи" 
-        Height="400" 
+        Height="450" 
         Width="400"
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <converters:ColorToBrushConverter x:Key="ColorConverter"/>
+        
+        <!-- Шаблон для категорий с обработкой null -->
+        <DataTemplate x:Key="CategoryTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Rectangle Width="16" Height="16" 
+                           Fill="{Binding Color, Converter={StaticResource ColorConverter}, 
+                                 TargetNullValue=LightGray}" 
+                           Margin="0,0,5,0"/>
+                <TextBlock Text="{Binding Name, TargetNullValue='Без категории'}" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
     </Window.Resources>
     
     <Grid Margin="15">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -37,29 +49,46 @@
                  VerticalScrollBarVisibility="Auto"
                  Margin="0,0,0,10" Padding="5"/>
         
-        <!-- Категория -->
-        <TextBlock Text="Категория:" Grid.Row="4" Margin="0,0,0,5"/>
-        <ComboBox Grid.Row="5" ItemsSource="{Binding Categories}"
-                  SelectedItem="{Binding Task.Category}"
-                  DisplayMemberPath="Name"
+        <!-- Приоритет -->
+        <TextBlock Text="Приоритет:" Grid.Row="4" Margin="0,0,0,5"/>
+        <ComboBox x:Name="priorityComboBox"
+                  Grid.Row="5"
+                  SelectedValuePath="Content"
                   Margin="0,0,0,15">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Rectangle Width="16" Height="16" 
-                                   Fill="{Binding Color, Converter={StaticResource ColorConverter}}"
-                                   Margin="0,0,5,0"/>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
+            <ComboBoxItem Content="Низкий"/>
+            <ComboBoxItem Content="Средний"/>
+            <ComboBoxItem Content="Высокий"/>
+        </ComboBox>
+        
+        <!-- Категория -->
+        <TextBlock Text="Категория:" Grid.Row="6" Margin="0,0,0,5"/>
+        <ComboBox Grid.Row="7" 
+                  ItemsSource="{Binding Categories}"
+                  SelectedItem="{Binding Task.Category}"
+                  ItemTemplate="{StaticResource CategoryTemplate}"
+                  Margin="0,0,0,15">
+            <!-- Явное применение шаблона -->
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="ContentTemplate" Value="{StaticResource CategoryTemplate}"/>
+                </Style>
+            </ComboBox.ItemContainerStyle>
         </ComboBox>
         
         <!-- Кнопки -->
-        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Сохранить" Width="100" Margin="0,0,10,0" 
-                    Click="SaveButton_Click" IsDefault="True"/>
-            <Button Content="Отмена" Width="100" Click="CancelButton_Click" IsCancel="True"/>
+        <StackPanel Grid.Row="8" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom">
+            <Button Content="Сохранить" 
+                    Width="100" 
+                    Margin="0,0,10,0" 
+                    Click="SaveButton_Click" 
+                    IsDefault="True"/>
+            <Button Content="Отмена" 
+                    Width="100" 
+                    Click="CancelButton_Click" 
+                    IsCancel="True"/>
         </StackPanel>
     </Grid>
 </Window>

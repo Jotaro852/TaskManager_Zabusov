@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hA6Zv8Esm1g=",
+  "dgSpecHash": "rrxPJeX0igk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Biostar\\RiderProjects\\TaskManager\\TaskManager.csproj",
+  "projectFilePath": "C:\\Users\\Biostar\\Documents\\GitHub\\TaskManager_Zabusov\\TaskManager.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Biostar\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],

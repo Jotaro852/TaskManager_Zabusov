@@ -14,13 +14,13 @@
     "Category": null
   },
   {
-    "Title": "Новая задача",
+    "Title": "1234",
     "Description": null,
     "IsCompleted": false,
     "Priority": 1,
     "Category": {
-      "Name": "Работа",
-      "Color": "#FF4CAF50"
+      "Name": "Важное",
+      "Color": "#FFFFC107"
     }
   },
   {

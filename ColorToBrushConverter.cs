@@ -21,7 +21,7 @@ namespace TaskManagerWPF.Converters
                 }
             }
             return Brushes.Gray;
-        }
+        }  
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

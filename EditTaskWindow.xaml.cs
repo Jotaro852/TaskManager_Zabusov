@@ -12,7 +12,7 @@ namespace TaskManagerWPF.Views
 
         public EditTaskWindow(TaskItem task, List<Category> categories)
         {
-            InitializeComponent();
+            InitializeComponent();  
             Task = task;
             Categories = categories;
             DataContext = this;

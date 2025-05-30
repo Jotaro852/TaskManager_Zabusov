@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Biostar\RiderProjects\TaskManager\obj\Debug\net8.0-windows\
+C:\Users\Biostar\Documents\GitHub\TaskManager_Zabusov\obj\Debug\net8.0-windows\
 TaskManager
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\Biostar\RiderProjects\TaskManager\App.xaml
+C:\Users\Biostar\Documents\GitHub\TaskManager_Zabusov\App.xaml
 2333294437
 
 141183349440
 199-1321044392
 EditTaskWindow.xaml;MainWindow.xaml;
 
-False
+True
 

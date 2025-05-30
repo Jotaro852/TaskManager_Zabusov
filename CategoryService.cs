@@ -14,7 +14,7 @@ namespace TaskManagerWPF.Services
         public CategoryService()
         {
             LoadCategories();
-            if (!Categories.Any(c => c.Name == "Без категорииии"))
+            if (!Categories.Any(c => c.Name == "Без категории"))
             {
                 Categories.Insert(0, new Category { Name = "Без категории", Color = "#FFA0A0A0" });
             }
